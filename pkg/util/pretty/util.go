@@ -56,6 +56,28 @@ func JoinNestedRight(sep Doc, nested ...Doc) Doc {
 	}
 }
 
+// JoinNestedLeft nests nested with string s.
+// For example:
+// aaaa <sep>
+// bbb
+// bbb <sep>
+// ccc
+// ccc
+func JoinNestedLeft(sep Doc, nested ...Doc) Doc {
+	switch len(nested) {
+	case 0:
+		return Nil
+	case 1:
+		return nested[0]
+	default:
+		return Concat(
+			FoldMap(Concat,
+				func(a Doc) Doc { return Concat(Line, ConcatSpace(NestT(Group(a)), sep)) },
+				nested[:len(nested)-1]...),
+			nested[0])
+	}
+}
+
 // ConcatDoc concatenates two Docs with between.
 func ConcatDoc(a, b, between Doc) Doc {
 	return simplifyNil(a, b, func(a, b Doc) Doc {

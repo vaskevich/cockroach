@@ -91,7 +91,8 @@ const (
 	// PrettyAlignAndExtraIndent does the work of PrettyAlignOnly and
 	// also extra indents the operands of AND and OR operators so
 	// that they appear aligned but also indented.
-	PrettyAlignAndExtraIndent = 3
+	PrettyAlignAndExtraIndent         = 3
+	PrettyAlignSameLineAndExtraIndent = 4
 )
 
 // keywordWithText returns a pretty.Keyword with left and/or right
@@ -219,6 +220,8 @@ func (p *PrettyCfg) joinNestedOuter(lbl string, d ...pretty.Doc) pretty.Doc {
 			items[i].Doc = dd
 		}
 		return pretty.Table(pretty.TableRightAlignFirstColumn, pretty.Keyword, items...)
+	case PrettyAlignSameLineAndExtraIndent:
+		return pretty.JoinNestedLeft(pretty.Keyword(lbl), d...)
 	default:
 		return pretty.JoinNestedRight(pretty.Keyword(lbl), d...)
 	}
